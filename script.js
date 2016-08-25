@@ -155,21 +155,16 @@ var colors = [
 var c;
 var ctx;
 
+function init() {
 
+}
 
-var x = 0;
+function update() {
 
-function main(){
-	c = document.getElementById("game_canvas");
-	ctx = c.getContext("2d");
-	c.width = width;
-	c.height = height;
-	var loop = function(){
-		update();
-		draw();
-		request_frame(this);
-	}
-	request_frame(loop);
+}
+
+function keyDown(e) {
+	var keyCode = e.keyCode;
 }
 
 function draw() {
@@ -193,23 +188,25 @@ function draw() {
 	}
 }
 
-function update(){
-
+function request_frame() {
+	window.requestAnimationFrame(loop);
 }
 
-function init(){
-
+function loop() {
+	update();
+	draw();
+	request_frame();
 }
 
-function request_frame(loop) {
-	window.requestAnimationFrame(loop,this.draw); // TODO draw() -> frame()
+function main() {
+	c = document.getElementById("game_canvas");
+	ctx = c.getContext("2d");
+	c.width = width;
+	c.height = height;
+	
+	init();
+	request_frame();
 }
 
-function keyDown(e){
-	var keyCode = e.keyCode;
-}
-
-
-//window.requestAnimationFrame(draw);
 main();
-window.addEventListener("keydown",this.keyDown,false);
+window.addEventListener("keydown", this.keyDown, false);
