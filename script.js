@@ -138,8 +138,8 @@ var blocks = [
 	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 	[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
 	[1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
@@ -155,7 +155,7 @@ var colors = [
 
 var c;
 var ctx;
-
+var canjump = false;
 var p = new Point(50, 100);
 //p.previous.x -= 1;
 
@@ -169,31 +169,32 @@ function update() {
 	p.accelerate(new Vector(0, 200.0));
 	//p.simulate(0.00001);
 	if(keys[0]){
-		//console.log("left");
 		keys[0] = false;
-		p.previous.x += 1;
+		p.previous = p.position.add(new Vector(1,0));
 	}else if(keys[2]){
-		//console.log("rigth");
 		keys[2] = false;
-		p.previous.x -= 1;
+		p.previous = p.position.sub(new Vector(1,0));
+	}else{
+		p.previous.x += ((p.position.x - p.previous.x)/13);
 	}
 
-	if(keys[1]){
-		//console.log("up");
+	if(keys[1] && canjump) {
 		keys[1] = false;
-		p.previous.y += 1;
+		p.previous.y += 2;
 	}else if(keys[3]){
-		//console.log("down");
 		keys[3] = false;
 		p.previous.y -= 1;
 	}
+
 	var n = 4;
 	for (var i = 0; i < n; ++i) {
 		p.simulate(tick);
+		canjump = false;
 		var tx = Math.floor((p.position.x) / 32);
 		var ty = Math.floor((p.position.y + 12) / 32);
 		if (blocks[ty][tx]) {
 			p.position.y = ty * 32 - 12;
+			canjump = true;
 		}
 
 		var tx1 = Math.floor((p.position.x + 12) / 32);
