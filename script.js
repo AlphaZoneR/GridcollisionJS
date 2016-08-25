@@ -155,12 +155,34 @@ var colors = [
 var c;
 var ctx;
 
-function init() {
+function Timer() {
+	return new Date().getTime() / 1000;
+}
 
+var old = Timer();
+
+var p = new Point(50, 100);
+p.previous.x -= 1;
+
+function init() {
 }
 
 function update() {
+	var now = Timer();
+	var tick = now - old;
+	old = now;
 
+	p.accelerate(new Vector(0, 200.0));
+
+	var n = 1;
+	for (var i = 0; i < n; ++i) {
+		p.simulate(tick);
+		var tx = Math.floor((p.position.x) / 32);
+		var ty = Math.floor((p.position.y + 12) / 32);
+		if (blocks[ty][tx]) {
+			p.position.y = ty * 32 - 12;
+		}
+	}
 }
 
 function keyDown(e) {
@@ -171,7 +193,6 @@ function draw() {
 	window.requestAnimationFrame(draw);
 	ctx.clearRect(0, 0, width, height);
 
-	var p = new Point(100, 100);
 	p.draw(ctx);
 
 	for (var y = 0; y < 20; ++y) {
