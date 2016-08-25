@@ -1,3 +1,124 @@
+var Vector = function(x, y) {
+	this.x = x;
+	this.y = y;
+}
+
+Vector.prototype = {
+	isub: function(other) {
+		this.x -= other.x;
+		this.y -= other.y;
+		return this;
+	},
+	sub: function(other) {
+		return new Vector(
+			this.x - other.x,
+			this.y - other.y
+		);
+	},
+	iadd: function(other) {
+		this.x += other.x;
+		this.y += other.y;
+		return this;
+	},
+	add: function(other) {
+		return new Vector(
+			this.x + other.x,
+			this.y + other.y
+		);
+	},
+
+	imul: function(scalar) {
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
+	},
+	mul: function(scalar) {
+		return new Vector(
+			this.x * scalar,
+			this.y * scalar
+		)
+	},
+	idiv: function(scalar) {
+		this.x /= scalar;
+		this.y /= scalar;
+		return this;
+	},
+	div: function(scalar) {
+		return new Vector(
+			this.x / scalar,
+			this.y / scalar
+		)
+	},
+
+	normalized: function() {
+		var x=this.x, y=this.y;
+		var length = Math.sqrt(x*x + y*y);
+		if(length > 0) {
+			return new Vector(x/length, y/length);
+		}
+		else{
+			return new Vector(0, 0);
+		}
+	},
+	normalize: function() {
+		var x=this.x, y=this.y;
+		var length = Math.sqrt(x*x + y*y);
+		if(length > 0) {
+			this.x = x/length;
+			this.y = y/length;
+		}
+		return this;
+	},
+
+	length: function() {
+		return Math.sqrt(this.x*this.x + this.y*this.y);
+	},
+
+	distance: function(other) {
+		var x = this.x - other.x;
+		var y = this.y - other.y;
+		return Math.sqrt(x*x + y*y);
+	},
+
+	copy: function() {
+		return new Vector(this.x, this.y);
+	},
+	zero: function() {
+		this.x = 0;
+		this.y = 0;
+	}
+}
+
+var Point = function(x, y) {
+	this.position = new Vector(x, y);
+	this.previous = new Vector(x, y);
+	this.acceleration = new Vector(0, 0);
+}
+
+Point.prototype = {
+	accelerate: function(vector) {
+		this.acceleration.iadd(vector);
+	},
+	correct: function(vector) {
+		this.position.iadd(vector);
+	},
+	simulate: function(delta) {
+		this.acceleration.imul(delta*delta);
+   
+		var position = this.position.mul(2).sub(this.previous).add(this.acceleration);
+
+		this.previous = this.position;
+		this.position = position;
+		this.acceleration.zero();
+	},
+	draw: function(ctx) {
+		ctx.fillStyle = 'rgba(0, 240, 0, 1.0)';
+		ctx.beginPath();
+		ctx.arc(this.position.x, this.position.y, 12, 0, Math.PI * 2, false);
+		ctx.fill();
+	},
+}
+
 var width = 960;
 var height = 540;
 
@@ -43,6 +164,9 @@ function request_frame() {
 function draw() {
 	window.requestAnimationFrame(draw);
 	ctx.clearRect(0, 0, width, height);
+
+	var p = new Point(100, 100);
+	p.draw(ctx);
 
 	for (var y = 0; y < 20; ++y) {
 		for (var x = 0; x < 20; ++x) {
