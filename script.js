@@ -81,7 +81,7 @@ function request_frame(loop) {
 	window.requestAnimationFrame(loop,this.draw); // TODO draw() -> frame()
 }
 
-function keydown(e){
+function keyDown(e){
 	var keyCode = e.keyCode;
 }
 
