@@ -90,6 +90,13 @@ Vector.prototype = {
 	}
 }
 
+var Sprite = function(src){
+	this.img = new Image();
+	this.img.src = src;
+	this.x = 0;
+	this.y = 0;
+}
+var background = new Sprite("background1.png");
 var Point = function(x, y) {
 	this.position = new Vector(x, y);
 	this.previous = new Vector(x, y);
@@ -99,6 +106,12 @@ var Point = function(x, y) {
 Point.prototype = {
 	accelerate: function(vector) {
 		this.acceleration.iadd(vector);
+		if(this.acceleration.x >= 301){
+			this.acceleration.x = 300;
+		}
+		if(this.acceleration.y >= 301){
+			this.acceleration.y = 300;
+		}
 	},
 	correct: function(vector) {
 		this.position.iadd(vector);
@@ -120,27 +133,29 @@ Point.prototype = {
 	},
 }
 
+var ground = new Image();
+
 var width = 960;
 var height = 540;
 
 var blocks = [
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 	[1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
 	[1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
 	[1,	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -157,9 +172,11 @@ var c;
 var ctx;
 var canjump = false;
 var p = new Point(50, 100);
+var pos = new Vector(0,0);
 //p.previous.x -= 1;
 
 function init() {
+	ground.src = "ground.png";
 }
 
 function update() {
@@ -167,23 +184,33 @@ function update() {
 
 	//keys = [false,false,false,false];
 	p.accelerate(new Vector(0, 200.0));
+	if(Math.abs(p.previous.x - p.position.x) > 3){
+		p.previous = p.position.sub(new Vector(1,0));
+		
+	}
+	if(Math.abs(p.previous.y - p.position.y) > 3){
+		p.previous = p.position.sub(new Vector(0,1));
+	}
 	//p.simulate(0.00001);
 	if(keys[0]){
 		keys[0] = false;
-		p.previous = p.position.add(new Vector(1,0));
+		//p.previous = p.position.add(new Vector(1,0));
+		p.position.x--;
+		//p.position.add(new Vector(10,0));
 	}else if(keys[2]){
 		keys[2] = false;
-		p.previous = p.position.sub(new Vector(1,0));
+		//p.previous = p.position.sub(new Vector(1,0));
+		p.position.x++;
 	}else{
-		p.previous.x += ((p.position.x - p.previous.x)/13);
+		p.previous.x += ((p.position.x - p.previous.x)/7);
 	}
 
 	if(keys[1] && canjump) {
 		keys[1] = false;
-		p.previous.y += 2;
+		p.position.y += 2;
 	}else if(keys[3]){
 		keys[3] = false;
-		p.previous.y -= 1;
+		p.position.y -= 1;
 	}
 
 	var n = 4;
@@ -220,15 +247,24 @@ function update() {
 function keyDown(e) {
 	
 	var keyCode = e.keyCode;
-	// console.log(keyCode);
+	console.log(keyCode);
 	if(keyCode == 37){
 		keys[0] = true;
+		if(background.x < 0){
+			background.x += 30;
+		}
+		
+		
 	}
 	if(keyCode == 38){
 		keys[1] = true;
 	}
 	if(keyCode == 39){
 		keys[2] = true;
+		if(background.x + background.img.width > width){
+			background.x -= 30;
+		}
+		
 	}
 	if(keyCode == 40){
 		keys[3] = true;
@@ -237,14 +273,15 @@ function keyDown(e) {
 
 function draw() {
 	ctx.clearRect(0, 0, width, height);
-
+	ctx.drawImage(background.img,background.x,background.y);
 	p.draw(ctx);
 
 	for (var y = 0; y < 20; ++y) {
-		for (var x = 0; x < 20; ++x) {
+		for (var x = 0; x < 30; ++x) {
 			if (blocks[y][x]) {
-				ctx.fillStyle = colors[blocks[y][x]];
-				ctx.fillRect(x * 32, y * 32, 32, 32);
+				//ctx.fillStyle = colors[blocks[y][x]];
+				//ctx.fillRect(x * 32, y * 32, 32, 32);
+				ctx.drawImage(ground,x*32,y*32);
 			}
 		}
 	}
