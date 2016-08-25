@@ -152,13 +152,24 @@ var colors = [
 	'rgba(0, 120, 240, 1.0)',
 ];
 
-var c = document.getElementById("game_canvas");
-var ctx = c.getContext("2d");
+var c;
+var ctx;
+
+
 
 var x = 0;
 
-function request_frame() {
-	window.requestAnimationFrame(draw); // TODO draw() -> frame()
+function main(){
+	c = document.getElementById("game_canvas");
+	ctx = c.getContext("2d");
+	c.width = width;
+	c.height = height;
+	var loop = function(){
+		update();
+		draw();
+		request_frame(this);
+	}
+	request_frame(loop);
 }
 
 function draw() {
@@ -182,4 +193,23 @@ function draw() {
 	}
 }
 
-window.requestAnimationFrame(draw);
+function update(){
+
+}
+
+function init(){
+
+}
+
+function request_frame(loop) {
+	window.requestAnimationFrame(loop,this.draw); // TODO draw() -> frame()
+}
+
+function keyDown(e){
+	var keyCode = e.keyCode;
+}
+
+
+//window.requestAnimationFrame(draw);
+main();
+window.addEventListener("keydown",this.keyDown,false);
