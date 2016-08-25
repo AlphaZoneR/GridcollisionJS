@@ -26,6 +26,10 @@ var ctx = c.getContext("2d");
 
 var x = 0;
 
+function request_frame() {
+	window.requestAnimationFrame(draw); // TODO draw() -> frame()
+}
+
 function draw() {
 	window.requestAnimationFrame(draw);
 	ctx.clearRect(0, 0, width, height);
