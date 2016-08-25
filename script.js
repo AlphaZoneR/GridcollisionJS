@@ -195,21 +195,23 @@ function update() {
 		if (blocks[ty][tx]) {
 			p.position.y = ty * 32 - 12;
 		}
+
 		var tx1 = Math.floor((p.position.x + 12) / 32);
 		var ty1 = Math.floor((p.position.y) / 32);
-		if(blocks[Math.abs(ty1)][Math.abs(tx1)]){
-			p.position.x = Math.abs(tx1) * 32 - 12;
+		if(blocks[ty1][tx1]){
+			p.position.x = tx1 * 32 - 12;
 		}
 
 		var tx2 = Math.floor((p.position.x) / 32);
 		var ty2 = Math.floor((p.position.y - 12) / 32)
-		if(blocks[Math.abs(ty2)][Math.abs(tx2)]){
-			p.position.y = Math.abs(ty2) * 32 + 12;
+		if(blocks[ty2][tx2]){
+			p.position.y = ty2 * 32 + 32 + 12;
 		}
+
 		var tx3 = Math.floor((p.position.x - 12) / 32);
 		var ty3 = Math.floor((p.position.y) / 32);
-		if(blocks[Math.abs(ty3)][Math.abs(tx3)]){
-			p.position.x = Math.abs(tx1) * 32 + 12;
+		if(blocks[ty3][tx3]){
+			p.position.x = tx1 * 32 + 12;
 		}
 		//console.log(tx1 + " " + ty1);
 	}
